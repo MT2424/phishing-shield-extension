@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Shield</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header">
+        <div class="logo">
+            <div class="shield-icon">🛡️</div>
+            <div class="title-section">
+                <h1>Phishing Shield</h1>
+                <div class="version">v1.0.0</div>
+            </div>
+        </div>
+        <div class="status-indicator" id="statusIndicator">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Current Site Section -->
+    <div class="section">
+        <h3>Current Site</h3>
+        <div class="current-site" id="currentSite">
+            <div class="site-info">
+                <div class="domain" id="currentDomain">Loading...</div>
+                <div class="site-status" id="siteStatus">Analyzing...</div>
+            </div>
+            <div class="site-actions">
+                <button class="btn btn-small btn-secondary" id="whitelistBtn" disabled>
+                    Add to Whitelist
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="section">
+        <h3>Protection Statistics</h3>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number" id="threatsBlocked">-</div>
+                <div class="stat-label">Threats Blocked</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="sitesAnalyzed">-</div>
+                <div class="stat-label">Sites Analyzed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="falsePositives">-</div>
+                <div class="stat-label">False Positives</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Protection Level Section -->
+    <div class="section">
+        <h3>Protection Level</h3>
+        <div class="protection-level">
+            <div class="level-options">
+                <label class="radio-option">
+                    <input type="radio" name="protectionLevel" value="permissive">
+                    <span class="radio-custom"></span>
+                    <div class="option-info">
+                        <strong>Permissive</strong>
+                        <small>Fewer warnings, may miss some threats</small>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="protectionLevel" value="normal" checked>
+                    <span class="radio-custom"></span>
+                    <div class="option-info">
+                        <strong>Normal</strong>
+                        <small>Balanced protection (recommended)</small>
+                    </div>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="protectionLevel" value="strict">
+                    <span class="radio-custom"></span>
+                    <div class="option-info">
+                        <strong>Strict</strong>
+                        <small>Maximum protection, more warnings</small>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Whitelist Management -->
+    <div class="section">
+        <h3>Trusted Sites</h3>
+        <div class="whitelist-section">
+            <div class="whitelist-count">
+                <span id="whitelistCount">0</span> trusted sites
+            </div>
+            <button class="btn btn-secondary btn-small" id="manageWhitelistBtn">
+                Manage List
+            </button>
+        </div>
+        
+        <!-- Whitelist Modal (initially hidden) -->
+        <div class="modal" id="whitelistModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Manage Trusted Sites</h4>
+                    <button class="close-btn" id="closeModalBtn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="add-site-form">
+                        <input type="text" id="newSiteInput" placeholder="Enter domain (e.g., example.com)" class="input-field">
+                        <button class="btn btn-primary btn-small" id="addSiteBtn">Add</button>
+                    </div>
+                    <div class="whitelist-items" id="whitelistItems">
+                        <!-- Whitelist items will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="section">
+        <h3>Quick Actions</h3>
+        <div class="action-buttons">
+            <button class="btn btn-secondary" id="reportSiteBtn">
+                🚨 Report Current Site
+            </button>
+            <button class="btn btn-secondary" id="resetStatsBtn">
+                📊 Reset Statistics
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-links">
+            <a href="#" id="helpBtn">Help</a>
+            <a href="#" id="aboutBtn">About</a>
+            <a href="#" id="feedbackBtn">Feedback</a>
+        </div>
+        <div class="footer-text">
+            Ultimate phishing protection with 99.9% detection rate
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="spinner"></div>
+        <div class="loading-text">Processing...</div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast" style="display: none;">
+        <div class="toast-content">
+            <span id="toastMessage"></span>
+            <button class="toast-close" id="toastClose">&times;</button>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

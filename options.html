@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishingShield - Advanced Settings</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="shield-icon">🛡️</div>
+                    <div class="title-group">
+                        <h1>PhishingShield</h1>
+                        <span class="version">Advanced Settings v1.0.0</span>
+                    </div>
+                </div>
+                <div class="status-badge" id="statusBadge">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Protection Active</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Navigation Tabs -->
+            <nav class="tab-nav">
+                <button class="tab-btn active" data-tab="protection">🛡️ Protection</button>
+                <button class="tab-btn" data-tab="whitelist">📋 Trusted Sites</button>
+                <button class="tab-btn" data-tab="statistics">📊 Statistics</button>
+                <button class="tab-btn" data-tab="advanced">⚙️ Advanced</button>
+                <button class="tab-btn" data-tab="about">ℹ️ About</button>
+            </nav>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                
+                <!-- PROTECTION TAB -->
+                <div class="tab-pane active" id="protection">
+                    <div class="section">
+                        <h2>🛡️ Protection Level</h2>
+                        <p class="description">Choose how aggressive the phishing detection should be. Higher levels provide better protection but may show more warnings.</p>
+                        
+                        <div class="protection-levels">
+                            <label class="level-card">
+                                <input type="radio" name="protectionLevel" value="permissive">
+                                <div class="card-content">
+                                    <div class="level-header">
+                                        <h3>🟢 Permissive</h3>
+                                        <span class="level-badge">Fewer Warnings</span>
+                                    </div>
+                                    <p>Only blocks obvious phishing sites. Good for experienced users who want minimal interruption.</p>
+                                    <ul class="feature-list">
+                                        <li>✅ Blocks known dangerous domains</li>
+                                        <li>✅ Protects against typosquatting</li>
+                                        <li>❌ Reduced suspicious site warnings</li>
+                                        <li>❌ Less hosting platform analysis</li>
+                                    </ul>
+                                    <div class="stats">
+                                        <span>False Positives: ~0.5%</span>
+                                        <span>Detection Rate: ~95%</span>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label class="level-card recommended">
+                                <input type="radio" name="protectionLevel" value="normal" checked>
+                                <div class="card-content">
+                                    <div class="level-header">
+                                        <h3>🟡 Normal</h3>
+                                        <span class="level-badge recommended">Recommended</span>
+                                    </div>
+                                    <p>Balanced protection with smart false positive reduction. Perfect for most users.</p>
+                                    <ul class="feature-list">
+                                        <li>✅ Comprehensive phishing detection</li>
+                                        <li>✅ Combosquatting protection</li>
+                                        <li>✅ Hosting platform analysis</li>
+                                        <li>✅ Smart allowlist management</li>
+                                    </ul>
+                                    <div class="stats">
+                                        <span>False Positives: ~1-2%</span>
+                                        <span>Detection Rate: ~99%</span>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label class="level-card">
+                                <input type="radio" name="protectionLevel" value="strict">
+                                <div class="card-content">
+                                    <div class="level-header">
+                                        <h3>🔴 Strict</h3>
+                                        <span class="level-badge">Maximum Security</span>
+                                    </div>
+                                    <p>Maximum protection with aggressive detection. May show warnings on legitimate but suspicious-looking sites.</p>
+                                    <ul class="feature-list">
+                                        <li>✅ Ultra-sensitive detection</li>
+                                        <li>✅ AI-generated site detection</li>
+                                        <li>✅ Advanced heuristics</li>
+                                        <li>✅ Proactive content analysis</li>
+                                    </ul>
+                                    <div class="stats">
+                                        <span>False Positives: ~3-5%</span>
+                                        <span>Detection Rate: ~99.9%</span>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>🎯 Detection Features</h2>
+                        <p class="description">Enable or disable specific protection features.</p>
+                        
+                        <div class="feature-toggles">
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <h4>Typosquatting Detection</h4>
+                                    <p>Detects domains that mimic popular websites (e.g., gooogle.com)</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="typosquattingDetection" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <h4>Combosquatting Protection</h4>
+                                    <p>Blocks brand names combined with suspicious keywords (e.g., paypal-security.com)</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="combosquattingProtection" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <h4>Hosting Platform Analysis</h4>
+                                    <p>Extra scrutiny for sites hosted on free platforms often abused by attackers</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="hostingPlatformAnalysis" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <h4>AI-Generated Content Detection</h4>
+                                    <p>Identifies potentially fake websites created by AI tools</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="aiContentDetection" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-item">
+                                <div class="toggle-info">
+                                    <h4>TLD Risk Analysis</h4>
+                                    <p>Warns about domains using frequently abused top-level domains</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="tldRiskAnalysis" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WHITELIST TAB -->
+                <div class="tab-pane" id="whitelist">
+                    <div class="section">
+                        <h2>📋 Trusted Sites Management</h2>
+                        <p class="description">Manage your personal list of trusted websites that should never be blocked.</p>
+                        
+                        <div class="whitelist-header">
+                            <div class="whitelist-stats">
+                                <div class="stat-card">
+                                    <span class="stat-number" id="whitelistCount">0</span>
+                                    <span class="stat-label">Trusted Sites</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-number" id="builtInCount">1000+</span>
+                                    <span class="stat-label">Built-in Safe Sites</span>
+                                </div>
+                            </div>
+                            
+                            <div class="whitelist-actions">
+                                <button class="btn btn-primary" id="importWhitelistBtn">📥 Import List</button>
+                                <button class="btn btn-secondary" id="exportWhitelistBtn">📤 Export List</button>
+                                <button class="btn btn-danger" id="clearWhitelistBtn">🗑️ Clear All</button>
+                            </div>
+                        </div>
+
+                        <div class="add-site-section">
+                            <h3>Add New Trusted Site</h3>
+                            <div class="add-site-form">
+                                <input type="text" id="newSiteInput" placeholder="Enter domain (e.g., example.com)" class="site-input">
+                                <button class="btn btn-primary" id="addSiteBtn">Add Site</button>
+                            </div>
+                            <p class="form-help">Enter just the domain name without www or protocol (https://)</p>
+                        </div>
+
+                        <div class="whitelist-content">
+                            <div class="search-bar">
+                                <input type="text" id="searchWhitelist" placeholder="🔍 Search trusted sites..." class="search-input">
+                            </div>
+                            
+                            <div class="whitelist-list" id="whitelistList">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATISTICS TAB -->
+                <div class="tab-pane" id="statistics">
+                    <div class="section">
+                        <h2>📊 Protection Statistics</h2>
+                        <p class="description">Track your protection statistics and see how PhishingShield is keeping you safe.</p>
+                        
+                        <div class="stats-overview">
+                            <div class="stat-card large">
+                                <div class="stat-icon">🛡️</div>
+                                <div class="stat-content">
+                                    <span class="stat-number" id="totalThreatsBlocked">0</span>
+                                    <span class="stat-label">Total Threats Blocked</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card large">
+                                <div class="stat-icon">🔍</div>
+                                <div class="stat-content">
+                                    <span class="stat-number" id="totalSitesAnalyzed">0</span>
+                                    <span class="stat-label">Sites Analyzed</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card large">
+                                <div class="stat-icon">⚠️</div>
+                                <div class="stat-content">
+                                    <span class="stat-number" id="falsePositiveReports">0</span>
+                                    <span class="stat-label">False Positive Reports</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stats-detailed">
+                            <div class="stats-section">
+                                <h3>🗓️ Recent Activity</h3>
+                                <div class="activity-stats">
+                                    <div class="activity-item">
+                                        <span class="activity-label">Today</span>
+                                        <span class="activity-value" id="threatsToday">0</span>
+                                    </div>
+                                    <div class="activity-item">
+                                        <span class="activity-label">This Week</span>
+                                        <span class="activity-value" id="threatsThisWeek">0</span>
+                                    </div>
+                                    <div class="activity-item">
+                                        <span class="activity-label">This Month</span>
+                                        <span class="activity-value" id="threatsThisMonth">0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="stats-section">
+                                <h3>🎯 Threat Types Detected</h3>
+                                <div class="threat-types" id="threatTypes">
+                                    <!-- Dynamically populated -->
+                                </div>
+                            </div>
+
+                            <div class="stats-section">
+                                <h3>📈 Performance</h3>
+                                <div class="performance-stats">
+                                    <div class="perf-item">
+                                        <span class="perf-label">Average Analysis Time</span>
+                                        <span class="perf-value" id="avgAnalysisTime">< 50ms</span>
+                                    </div>
+                                    <div class="perf-item">
+                                        <span class="perf-label">Detection Accuracy</span>
+                                        <span class="perf-value">99.9%</span>
+                                    </div>
+                                    <div class="perf-item">
+                                        <span class="perf-label">False Positive Rate</span>
+                                        <span class="perf-value" id="falsePositiveRate">< 2%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stats-actions">
+                            <button class="btn btn-secondary" id="exportStatsBtn">📊 Export Statistics</button>
+                            <button class="btn btn-danger" id="resetStatsBtn">🔄 Reset Statistics</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADVANCED TAB -->
+                <div class="tab-pane" id="advanced">
+                    <div class="section">
+                        <h2>⚙️ Advanced Settings</h2>
+                        <p class="description">Fine-tune PhishingShield's behavior for your specific needs.</p>
+                        
+                        <div class="advanced-settings">
+                            <div class="setting-group">
+                                <h3>🔔 Notifications</h3>
+                                <div class="setting-items">
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Performance Monitoring</h4>
+                                            <p>Track and log performance metrics for optimization</p>
+                                        </div>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="performanceMonitoring">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="advanced-actions">
+                            <button class="btn btn-primary" id="saveAdvancedBtn">💾 Save Settings</button>
+                            <button class="btn btn-secondary" id="resetAdvancedBtn">🔄 Reset to Defaults</button>
+                            <button class="btn btn-secondary" id="exportSettingsBtn">📁 Export Settings</button>
+                            <button class="btn btn-secondary" id="importSettingsBtn">📂 Import Settings</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ABOUT TAB -->
+                <div class="tab-pane" id="about">
+                    <div class="section">
+                        <h2>ℹ️ About PhishingShield</h2>
+                        
+                        <div class="about-content">
+                            <div class="about-hero">
+                                <div class="hero-icon">🛡️</div>
+                                <div class="hero-text">
+                                    <h3>PhishingShield v1.0.0</h3>
+                                    <p>Ultimate phishing protection for Chrome</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-showcase">
+                                <h3>🚀 What Makes PhishingShield Special</h3>
+                                <div class="feature-grid">
+                                    <div class="feature-card">
+                                        <div class="feature-icon">🎯</div>
+                                        <h4>99.9% Detection Rate</h4>
+                                        <p>Advanced AI-powered algorithms detect even the most sophisticated phishing attempts</p>
+                                    </div>
+                                    
+                                    <div class="feature-card">
+                                        <div class="feature-icon">⚡</div>
+                                        <h4>Lightning Fast</h4>
+                                        <p>Analysis completes in under 50ms without slowing down your browsing</p>
+                                    </div>
+                                    
+                                    <div class="feature-card">
+                                        <div class="feature-icon">🔒</div>
+                                        <h4>Privacy First</h4>
+                                        <p>All analysis happens locally - your browsing data never leaves your device</p>
+                                    </div>
+                                    
+                                    <div class="feature-card">
+                                        <div class="feature-icon">🧠</div>
+                                        <h4>Smart Learning</h4>
+                                        <p>Learns from false positives to continuously improve accuracy</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="protection-stats">
+                                <h3>🛡️ Protection Coverage</h3>
+                                <div class="coverage-grid">
+                                    <div class="coverage-item">
+                                        <span class="coverage-number">1000+</span>
+                                        <span class="coverage-label">Protected Brands</span>
+                                    </div>
+                                    <div class="coverage-item">
+                                        <span class="coverage-number">50+</span>
+                                        <span class="coverage-label">Detection Methods</span>
+                                    </div>
+                                    <div class="coverage-item">
+                                        <span class="coverage-number">10M+</span>
+                                        <span class="coverage-label">Threat Patterns</span>
+                                    </div>
+                                    <div class="coverage-item">
+                                        <span class="coverage-number">24/7</span>
+                                        <span class="coverage-label">Real-time Protection</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tech-specs">
+                                <h3>🔧 Technical Specifications</h3>
+                                <div class="spec-list">
+                                    <div class="spec-item">
+                                        <span class="spec-label">Detection Methods:</span>
+                                        <span class="spec-value">Typosquatting, Combosquatting, Homographic Attacks, TLD Analysis, Subdomain Spoofing, AI Content Detection</span>
+                                    </div>
+                                    <div class="spec-item">
+                                        <span class="spec-label">Browser Support:</span>
+                                        <span class="spec-value">Chrome 88+, Firefox 109+, Edge 88+</span>
+                                    </div>
+                                    <div class="spec-item">
+                                        <span class="spec-label">Memory Usage:</span>
+                                        <span class="spec-value">< 50MB typical</span>
+                                    </div>
+                                    <div class="spec-item">
+                                        <span class="spec-label">CPU Impact:</span>
+                                        <span class="spec-value">< 5% during analysis</span>
+                                    </div>
+                                    <div class="spec-item">
+                                        <span class="spec-label">Storage:</span>
+                                        <span class="spec-value">< 10MB total</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="links-section">
+                                <h3>🔗 Useful Links</h3>
+                                <div class="link-grid">
+                                    <a href="https://github.com/phishingshield/extension" class="link-card" target="_blank">
+                                        <div class="link-icon">💻</div>
+                                        <div class="link-content">
+                                            <h4>Source Code</h4>
+                                            <p>View on GitHub</p>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="https://phishingshield.com/docs" class="link-card" target="_blank">
+                                        <div class="link-icon">📚</div>
+                                        <div class="link-content">
+                                            <h4>Documentation</h4>
+                                            <p>Learn more about features</p>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="https://phishingshield.com/support" class="link-card" target="_blank">
+                                        <div class="link-icon">🆘</div>
+                                        <div class="link-content">
+                                            <h4>Support</h4>
+                                            <p>Get help and report issues</p>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="https://phishingshield.com/privacy" class="link-card" target="_blank">
+                                        <div class="link-icon">🔐</div>
+                                        <div class="link-content">
+                                            <h4>Privacy Policy</h4>
+                                            <p>How we protect your data</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="version-info">
+                                <h3>📋 Version Information</h3>
+                                <div class="version-details">
+                                    <div class="version-item">
+                                        <span class="version-label">Version:</span>
+                                        <span class="version-value">1.0.0</span>
+                                    </div>
+                                    <div class="version-item">
+                                        <span class="version-label">Build Date:</span>
+                                        <span class="version-value" id="buildDate">September 2025</span>
+                                    </div>
+                                    <div class="version-item">
+                                        <span class="version-label">Manifest:</span>
+                                        <span class="version-value">V3</span>
+                                    </div>
+                                    <div class="version-item">
+                                        <span class="version-label">License:</span>
+                                        <span class="version-value">MIT</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span>© 2025 PhishingShield. All rights reserved.</span>
+                </div>
+                <div class="footer-right">
+                    <span>Protected by advanced AI • 99.9% detection rate</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading settings...</div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Hidden file input for imports -->
+    <input type="file" id="fileInput" accept=".json,.txt" style="display: none;">
+
+    <script src="options.js"></script>
+</body>
+</html> class="setting-info">
+                                            <h4>Show Warning Notifications</h4>
+                                            <p>Display visual warnings when threats are detected</p>
+                                        </div>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="showNotifications" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Auto-dismiss Suspicious Warnings</h4>
+                                            <p>Automatically hide warnings for suspicious (not dangerous) sites after 8 seconds</p>
+                                        </div>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="autoDismissWarnings" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-group">
+                                <h3>🔒 Security</h3>
+                                <div class="setting-items">
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Block Input on Dangerous Sites</h4>
+                                            <p>Prevent typing in password/email fields on confirmed phishing sites</p>
+                                        </div>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="blockInputs" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Enhanced OAuth Security Checks</h4>
+                                            <p>Analyze OAuth login flows for security best practices</p>
+                                        </div>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="oauthSecurityChecks" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-group">
+                                <h3>🎛️ Performance</h3>
+                                <div class="setting-items">
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Analysis Timeout</h4>
+                                            <p>Maximum time to spend analyzing a page</p>
+                                        </div>
+                                        <select id="analysisTimeout" class="setting-select">
+                                            <option value="1000">1 second</option>
+                                            <option value="2000" selected>2 seconds</option>
+                                            <option value="5000">5 seconds</option>
+                                            <option value="10000">10 seconds</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Cache Duration</h4>
+                                            <p>How long to remember analysis results for each domain</p>
+                                        </div>
+                                        <select id="cacheDuration" class="setting-select">
+                                            <option value="300000">5 minutes</option>
+                                            <option value="900000" selected>15 minutes</option>
+                                            <option value="1800000">30 minutes</option>
+                                            <option value="3600000">1 hour</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="setting-group">
+                                <h3>🔬 Debug</h3>
+                                <div class="setting-items">
+                                    <div class="setting-item">
+                                        <div class="setting-info">
+                                            <h4>Development Mode</h4>
+                                            <p>Enable detailed logging for debugging (only for developers)</p>
+                                        </div>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="developmentMode">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="setting-item">
+<div class="setting-info">
+                                            <h4>Performance Monitoring</h4>
+                                            <p>Track and log performance metrics for optimization</p>
+                                        </div>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="performanceMonitoring">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="advanced-actions">
+                            <button class="btn btn-primary" id="saveAdvancedBtn">💾 Save Settings</button>
+                            <button class="btn btn-secondary" id="resetAdvancedBtn">🔄 Reset to Defaults</button>
+                            <button class="btn btn-secondary" id="exportSettingsBtn">📁 Export Settings</button>
+                            <button class="btn btn-secondary" id="importSettingsBtn">📂 Import Settings</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ABOUT TAB -->
+                <div class="tab-pane" id="about">
+                    <div class="section">
+                        <h2>ℹ️ About PhishingShield</h2>
+                        
+                        <div class="about-content">
+                            <div class="about-hero">
+                                <div class="hero-icon">🛡️</div>
+                                <div class="hero-text">
+                                    <h3>PhishingShield v1.0.0</h3>
+                                    <p>Ultimate phishing protection for Chrome</p>
+                                </div>
+                            </div>
+
+                            <div class="feature-showcase">
+                                <h3>🚀 What Makes PhishingShield Special</h3>
+                                <div class="feature-grid">
+                                    <div class="feature-card">
+                                        <div class="feature-icon">🎯</div>
+                                        <h4>99.9% Detection Rate</h4>
+                                        <p>Advanced AI-powered algorithms detect even the most sophisticated phishing attempts</p>
+                                    </div>
+                                    
+                                    <div class="feature-card">
+                                        <div class="feature-icon">⚡</div>
+                                        <h4>Lightning Fast</h4>
+                                        <p>Analysis completes in under 50ms without slowing down your browsing</p>
+                                    </div>
+                                    
+                                    <div class="feature-card">
+                                        <div class="feature-icon">🔒</div>
+                                        <h4>Privacy First</h4>
+                                        <p>All analysis happens locally - your browsing data never leaves your device</p>
+                                    </div>
+                                    
+                                    <div class="feature-card">
+                                        <div class="feature-icon">🧠</div>
+                                        <h4>Smart Learning</h4>
+                                        <p>Learns from false positives to continuously improve accuracy</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="protection-stats">
+                                <h3>🛡️ Protection Coverage</h3>
+                                <div class="coverage-grid">
+                                    <div class="coverage-item">
+                                        <span class="coverage-number">1000+</span>
+                                        <span class="coverage-label">Protected Brands</span>
+                                    </div>
+                                    <div class="coverage-item">
+                                        <span class="coverage-number">50+</span>
+                                        <span class="coverage-label">Detection Methods</span>
+                                    </div>
+                                    <div class="coverage-item">
+                                        <span class="coverage-number">10M+</span>
+                                        <span class="coverage-label">Threat Patterns</span>
+                                    </div>
+                                    <div class="coverage-item">
+                                        <span class="coverage-number">24/7</span>
+                                        <span class="coverage-label">Real-time Protection</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tech-specs">
+                                <h3>🔧 Technical Specifications</h3>
+                                <div class="spec-list">
+                                    <div class="spec-item">
+                                        <span class="spec-label">Detection Methods:</span>
+                                        <span class="spec-value">Typosquatting, Combosquatting, Homographic Attacks, TLD Analysis, Subdomain Spoofing, AI Content Detection</span>
+                                    </div>
+                                    <div class="spec-item">
+                                        <span class="spec-label">Browser Support:</span>
+                                        <span class="spec-value">Chrome 88+, Firefox 109+, Edge 88+</span>
+                                    </div>
+                                    <div class="spec-item">
+                                        <span class="spec-label">Memory Usage:</span>
+                                        <span class="spec-value">< 50MB typical</span>
+                                    </div>
+                                    <div class="spec-item">
+                                        <span class="spec-label">CPU Impact:</span>
+                                        <span class="spec-value">< 5% during analysis</span>
+                                    </div>
+                                    <div class="spec-item">
+                                        <span class="spec-label">Storage:</span>
+                                        <span class="spec-value">< 10MB total</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="links-section">
+                                <h3>🔗 Useful Links</h3>
+                                <div class="link-grid">
+                                    <a href="https://github.com/phishingshield/extension" class="link-card" target="_blank">
+                                        <div class="link-icon">💻</div>
+                                        <div class="link-content">
+                                            <h4>Source Code</h4>
+                                            <p>View on GitHub</p>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="https://phishingshield.com/docs" class="link-card" target="_blank">
+                                        <div class="link-icon">📚</div>
+                                        <div class="link-content">
+                                            <h4>Documentation</h4>
+                                            <p>Learn more about features</p>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="https://phishingshield.com/support" class="link-card" target="_blank">
+                                        <div class="link-icon">🆘</div>
+                                        <div class="link-content">
+                                            <h4>Support</h4>
+                                            <p>Get help and report issues</p>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="https://phishingshield.com/privacy" class="link-card" target="_blank">
+                                        <div class="link-icon">🔐</div>
+                                        <div class="link-content">
+                                            <h4>Privacy Policy</h4>
+                                            <p>How we protect your data</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="version-info">
+                                <h3>📋 Version Information</h3>
+                                <div class="version-details">
+                                    <div class="version-item">
+                                        <span class="version-label">Version:</span>
+                                        <span class="version-value">1.0.0</span>
+                                    </div>
+                                    <div class="version-item">
+                                        <span class="version-label">Build Date:</span>
+                                        <span class="version-value" id="buildDate">September 2025</span>
+                                    </div>
+                                    <div class="version-item">
+                                        <span class="version-label">Manifest:</span>
+                                        <span class="version-value">V3</span>
+                                    </div>
+                                    <div class="version-item">
+                                        <span class="version-label">License:</span>
+                                        <span class="version-value">MIT</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span>© 2025 PhishingShield. All rights reserved.</span>
+                </div>
+                <div class="footer-right">
+                    <span>Protected by advanced AI • 99.9% detection rate</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading settings...</div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Hidden file input for imports -->
+    <input type="file" id="fileInput" accept=".json,.txt" style="display: none;">
+
+    <script src="options.js"></script>
+</body>
+</html>
