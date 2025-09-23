@@ -1,7 +1,7 @@
 /**
  * PHISHING SHIELD - FIXED CONTENT SCRIPT
- * Clean, easy-to-understand version with critical fixes
- * Version: 1.2.1 - AMAZON.COM FALSE POSITIVE FIXED
+ * Google Login False Positive CORRECTED
+ * Version: 1.2.2 - CRITICAL LOGIN FIXES
  */
 
 // =============================================================================
@@ -71,61 +71,80 @@ class PhishingShield {
     
     SimpleLogger.log('Current domain:', this.currentDomain);
     
-    // CRITICAL: Build safe domains list
+    // CRITICAL FIX: Build comprehensive safe domains with subdomains
     this.safeDomains = this.buildSafeDomains();
+    this.safeDomainsParent = this.buildParentDomains(); // NEW: Parent domain check
     this.dangerousPatterns = this.buildDangerousPatterns();
     this.enterprisePatterns = this.buildEnterprisePatterns();
+    this.oauthProviders = this.buildOAuthProviders(); // NEW: OAuth providers
     
     SimpleLogger.log('Safe domains in list:', this.safeDomains.size);
+    SimpleLogger.log('OAuth providers in list:', this.oauthProviders.size);
     
     // Start analysis
     this.initialize();
   }
 
   // =============================================================================
-  // SAFE DOMAINS LIST (CRITICAL FIX)
+  // SAFE DOMAINS LIST (CRITICAL FIX - WITH SUBDOMAINS!)
   // =============================================================================
   buildSafeDomains() {
     const safeDomains = new Set([
-      // MAJOR SEARCH ENGINES
-      'google.com', 'google.fi', 'google.co.uk', 'google.de', 'google.fr', 'google.ca', 'google.com.au',
+      // ===== GOOGLE ECOSYSTEM (FIXED!) =====
+      'google.com', 'accounts.google.com', 'myaccount.google.com', 
+      'admin.google.com', 'console.cloud.google.com', 'drive.google.com',
+      'mail.google.com', 'calendar.google.com', 'photos.google.com',
+      'play.google.com', 'store.google.com', 'pay.google.com',
+      'google.fi', 'google.co.uk', 'google.de', 'google.fr', 'google.ca',
+      
+      // ===== MICROSOFT ECOSYSTEM (FIXED!) =====
+      'microsoft.com', 'login.microsoftonline.com', 'account.microsoft.com',
+      'portal.azure.com', 'admin.microsoft.com', 'office.com', 'outlook.com',
+      'live.com', 'hotmail.com', 'msn.com', 'xbox.com', 'skype.com',
+      
+      // ===== APPLE ECOSYSTEM (FIXED!) =====
+      'apple.com', 'appleid.apple.com', 'icloud.com', 'developer.apple.com',
+      'itunes.com', 'mac.com', 'me.com',
+      
+      // ===== AMAZON ECOSYSTEM (Already fixed) =====
+      'amazon.com', 'amazon.co.uk', 'amazon.de', 'amazon.fr', 'amazon.ca',
+      'amazon.com.au', 'amazon.jp', 'amazon.in', 'amazon.it', 'amazon.es',
+      'sellercentral.amazon.com', 'aws.amazon.com',
+      
+      // ===== SOCIAL MEDIA (FIXED!) =====
+      'facebook.com', 'www.facebook.com', 'business.facebook.com',
+      'developers.facebook.com', 'instagram.com', 'twitter.com', 'x.com',
+      'linkedin.com', 'tiktok.com', 'discord.com', 'reddit.com',
+      'snapchat.com', 'telegram.org', 'whatsapp.com', 'pinterest.com',
+      
+      // ===== GITHUB & DEVELOPMENT (FIXED!) =====
+      'github.com', 'api.github.com', 'docs.github.com', 'education.github.com',
+      'gitlab.com', 'stackoverflow.com', 'npmjs.com', 'docker.com',
+      
+      // ===== FINANCIAL SERVICES (FIXED!) =====
+      'paypal.com', 'www.paypal.com', 'business.paypal.com',
+      'stripe.com', 'dashboard.stripe.com', 'wise.com', 'revolut.com',
+      'klarna.com', 'coinbase.com', 'pro.coinbase.com', 'binance.com',
+      
+      // ===== FINNISH SERVICES (FIXED!) =====
+      'nordea.fi', 'verkkopankki.nordea.fi', 'op.fi', 'op-asiakas.fi',
+      'danske.fi', 'danskebank.fi', 'handelsbanken.fi', 'aktia.fi',
+      'suomi.fi', 'kela.fi', 'asiointitili.kela.fi', 'vero.fi', 'omavero.fi',
+      'traficom.fi', 'dvv.fi', 'valtioneuvosto.fi',
+      'verkkokauppa.com', 'elisa.fi', 'telia.fi', 'dna.fi', 'posti.fi',
+      'yle.fi', 'hs.fi', 'is.fi', 'iltalehti.fi', 'mtv.fi',
+      
+      // ===== SEARCH ENGINES =====
       'bing.com', 'yahoo.com', 'duckduckgo.com', 'yandex.com', 'baidu.com',
       
-      // SOCIAL MEDIA
-      'facebook.com', 'instagram.com', 'twitter.com', 'x.com', 'linkedin.com', 'tiktok.com',
-      'discord.com', 'reddit.com', 'snapchat.com', 'telegram.org', 'whatsapp.com', 'pinterest.com',
+      // ===== E-COMMERCE =====
+      'ebay.com', 'shopify.com', 'etsy.com', 'walmart.com', 'target.com',
+      'alibaba.com',
       
-      // MICROSOFT ECOSYSTEM
-      'microsoft.com', 'outlook.com', 'office.com', 'live.com', 'hotmail.com', 'msn.com',
-      'azure.com', 'xbox.com', 'skype.com', 'teams.microsoft.com',
-      
-      // APPLE ECOSYSTEM
-      'apple.com', 'icloud.com', 'itunes.com', 'mac.com', 'me.com', 'appleid.apple.com',
-      
-      // AMAZON ECOSYSTEM - CRITICAL FIX! (This was missing!)
-      'amazon.com', 'amazon.co.uk', 'amazon.de', 'amazon.fr', 'amazon.ca', 'amazon.com.au',
-      'amazon.jp', 'amazon.in', 'amazon.it', 'amazon.es', 'amazon.com.br',
-      
-      // E-COMMERCE
-      'ebay.com', 'shopify.com', 'etsy.com', 'walmart.com', 'target.com', 'alibaba.com',
-      
-      // FINANCIAL SERVICES
-      'paypal.com', 'stripe.com', 'wise.com', 'revolut.com', 'klarna.com',
-      'coinbase.com', 'binance.com', 'kraken.com', 'square.com',
-      
-      // FINNISH SERVICES
-      'nordea.fi', 'op.fi', 'danske.fi', 'handelsbanken.fi', 'aktia.fi', 'saastopankki.fi',
-      'suomi.fi', 'kela.fi', 'vero.fi', 'traficom.fi', 'dvv.fi', 'valtioneuvosto.fi',
-      'verkkokauppa.com', 'elisa.fi', 'telia.fi', 'dna.fi', 'posti.fi', 'matkahuolto.fi',
-      'yle.fi', 'hs.fi', 'is.fi', 'iltalehti.fi', 'mtv.fi', 'nelonen.fi',
-      
-      // TECHNOLOGY & DEVELOPMENT
-      'github.com', 'gitlab.com', 'stackoverflow.com', 'npmjs.com', 'docker.com',
-      
-      // MEDIA & ENTERTAINMENT
+      // ===== MEDIA & ENTERTAINMENT =====
       'youtube.com', 'netflix.com', 'spotify.com', 'steam.com', 'twitch.tv',
       
-      // TESTING DOMAINS
+      // ===== TESTING DOMAINS =====
       'localhost', '127.0.0.1', 'scannec.com', 'example.com', 'test.com'
     ]);
     
@@ -134,36 +153,59 @@ class PhishingShield {
   }
 
   // =============================================================================
+  // NEW: PARENT DOMAIN CHECK (for subdomain support)
+  // =============================================================================
+  buildParentDomains() {
+    return new Set([
+      'google.com', 'microsoft.com', 'apple.com', 'amazon.com',
+      'facebook.com', 'github.com', 'paypal.com', 'stripe.com',
+      'nordea.fi', 'op.fi', 'danske.fi', 'handelsbanken.fi',
+      'suomi.fi', 'kela.fi', 'vero.fi', 'elisa.fi', 'telia.fi'
+    ]);
+  }
+
+  // =============================================================================
+  // NEW: OAUTH PROVIDERS (always safe for login)
+  // =============================================================================
+  buildOAuthProviders() {
+    return new Set([
+      'accounts.google.com', 'login.microsoftonline.com',
+      'appleid.apple.com', 'login.facebook.com', 'github.com',
+      'login.yahoo.com', 'auth0.com', 'okta.com', 'onelogin.com',
+      'pingidentity.com', 'salesforce.com', 'login.salesforce.com'
+    ]);
+  }
+
+  // =============================================================================
   // DANGEROUS PATTERNS DETECTION
   // =============================================================================
   buildDangerousPatterns() {
     return [
-      // Security update scams
-      /.*-security-?(update|verification|alert)\.(com|net|org|co\.uk|info)$/i,
-      /.*-account-?(suspended|locked|verification)\.(com|net|org|co\.uk|info)$/i,
+      // Security update scams (FIXED: More precise)
+      /^.*-security-?(update|verification|alert)\.(com|net|org|co\.uk|info)$/i,
+      /^.*-account-?(suspended|locked|verification)\.(com|net|org|co\.uk|info)$/i,
       
-      // Known brand impersonations
-      /.*amaz[o0]n[^\.]*\.(com|net|org|co\.uk)$/i,  // amazon -> amazom, etc.
-      /.*payp[a4]l[^\.]*\.(com|net|org|co\.uk)$/i,  // paypal -> payp4l, etc.
-      /.*g[o0]{2,}gle\.(com|net|org|co\.uk)$/i,     // google -> gooogle, etc.
-      /.*microsoft.*-account.*\.(com|net|org|co\.uk)$/i,
-      /.*fac[e3]b[o0]{2}k\.(com|net|org|co\.uk)$/i, // facebook -> faceb00k, etc.
+      // Known brand impersonations (FIXED: More precise to avoid false positives)
+      /^.*amaz[o0]n[^\.]*-.*\.(com|net|org|co\.uk)$/i,  // amazon-something.com (not amazon.com)
+      /^.*payp[a4]l[^\.]*-.*\.(com|net|org|co\.uk)$/i,  // paypal-something.com (not paypal.com)
+      /^.*g[o0]{2,}gle[^\.]*\.(com|net|org|co\.uk)$/i,  // gooogle.com, but not google.com
+      /^.*microsoft.*-account.*\.(com|net|org|co\.uk)$/i,
+      /^.*fac[e3]b[o0]{2}k[^\.]*\.(com|net|org|co\.uk)$/i,
       
-      // Free hosting phishing
-      /.*-login\.vercel\.app$/i,
-      /.*-auth\.netlify\.app$/i,
-      /.*signin.*\.herokuapp\.com$/i,
-      /.*secure.*\.surge\.sh$/i,
+      // Free hosting phishing (SAFER: specific patterns)
+      /^.*-login\.vercel\.app$/i,
+      /^.*-auth\.netlify\.app$/i,
+      /^.*signin.*\.herokuapp\.com$/i,
+      /^.*secure.*\.surge\.sh$/i,
       
-      // Finnish banks
-      /.*nord[e3][a4].*\.(com|net|org)$/i,   // nordea variations
-      /.*[o0]p-pankki.*\.(com|net|org)$/i,  // op-pankki variations
-      /.*dansk[e3].*bank.*\.(com|net|org)$/i,
+      // Finnish banks (FIXED: More precise)
+      /^.*nord[e3][a4].*-.*\.(com|net|org)$/i,   // nordea-something (not nordea.fi)
+      /^.*[o0]p-pankki.*-.*\.(com|net|org)$/i,  // op-pankki-something
+      /^.*dansk[e3].*bank.*-.*\.(com|net|org)$/i,
       
-      // Combosquatting patterns
-      /.*-?(security|secure|login|signin|account|verify|verification|confirm|confirmation)-?.*\.(com|net|org|co|info|biz)$/i,
-      /.*-?(update|renewal|restore|recovery|support|service|help|assist)-?.*\.(com|net|org|co|info|biz)$/i,
-      /.*-?(suspended|locked|blocked|expired|urgent|immediate|alert|warning)-?.*\.(com|net|org|co|info|biz)$/i
+      // Combosquatting patterns (SAFER: exclude legitimate subdomains)
+      /^.+-(security|secure|login|signin|account|verify|verification|confirm|confirmation)-(urgent|now|required)\.(com|net|org|co|info|biz)$/i,
+      /^(security|secure|login|signin|account|verify|verification)-.+-.*\.(com|net|org|co|info|biz)$/i,
     ];
   }
 
@@ -172,49 +214,51 @@ class PhishingShield {
   // =============================================================================
   buildEnterprisePatterns() {
     return [
-      // Amazon Web Services
+      // Amazon Web Services (SAFE)
       /^[a-f0-9]{16,64}\.execute-api\.[a-z0-9-]+\.amazonaws\.com$/i,
       /^[a-f0-9]{16,64}\.cloudfront\.net$/i,
       /^[a-z0-9-]{10,63}\.s3\.[a-z0-9-]+\.amazonaws\.com$/i,
       /^[a-z0-9-]{10,63}\.s3\.amazonaws\.com$/i,
       
-      // Microsoft Azure
+      // Microsoft Azure (SAFE)
       /^[a-f0-9-]{30,}\.azurewebsites\.net$/i,
       /^[a-z0-9]{10,24}\.blob\.core\.windows\.net$/i,
       /^[a-z0-9-]{10,63}\.servicebus\.windows\.net$/i,
       
-      // Google Cloud Platform
+      // Google Cloud Platform (SAFE)
       /^[a-z0-9-]{10,63}\.appspot\.com$/i,
       /^[a-z0-9-]{10,63}\.cloudfunctions\.net$/i,
       /^[a-f0-9]{8,64}\.web\.app$/i,
       /^[a-f0-9]{8,64}\.firebaseapp\.com$/i,
       
-      // Cloudflare
-      /^[a-f0-9]{8,32}\.workers\.dev$/i,
-      /^[a-f0-9]{8,32}\.pages\.dev$/i,
-      
-      // GitHub (legitimate repositories)
-      /^[a-z0-9-]{1,39}\.github\.io$/i,
-      /^[a-z0-9-]{8,63}\.githubusercontent\.com$/i,
-      
-      // Netlify (legitimate deployments)
-      /^[a-f0-9]{8,16}-[a-f0-9]{8,16}--[a-z0-9-]{1,63}\.netlify\.app$/i,
-      /^[a-z0-9-]{3,63}--[a-f0-9]{8,16}\.netlify\.app$/i,
-      
-      // Vercel (legitimate deployments)
-      /^[a-z0-9-]{3,63}-[a-f0-9]{8,10}\.vercel\.app$/i,
-      /^[a-z0-9-]{3,63}-[a-z0-9]{4,10}-[a-f0-9]{8,10}\.vercel\.app$/i,
-      
-      // Facebook/Meta content delivery
-      /^[a-z0-9-]{8,32}\.fbcdn\.net$/i,
-      /^[a-z0-9-]{8,32}\.facebook\.com$/i,
-      
-      // Google services
+      // Google services (SAFE)
       /^[a-z0-9-]{8,32}\.doubleclick\.net$/i,
       /^[a-z0-9-]{8,32}\.googleadservices\.com$/i,
       /^[a-z0-9-]{8,32}\.googlesyndication\.com$/i,
+      /^[a-z0-9-]{8,32}\.googletagmanager\.com$/i,
+      /^[a-z0-9-]{8,32}\.googleapis\.com$/i,
       
-      // Legitimate security platforms
+      // Cloudflare (SAFE)
+      /^[a-f0-9]{8,32}\.workers\.dev$/i,
+      /^[a-f0-9]{8,32}\.pages\.dev$/i,
+      
+      // GitHub (legitimate repositories) (SAFE)
+      /^[a-z0-9-]{1,39}\.github\.io$/i,
+      /^[a-z0-9-]{8,63}\.githubusercontent\.com$/i,
+      
+      // Netlify (legitimate deployments) (SAFE)
+      /^[a-f0-9]{8,16}-[a-f0-9]{8,16}--[a-z0-9-]{1,63}\.netlify\.app$/i,
+      /^[a-z0-9-]{3,63}--[a-f0-9]{8,16}\.netlify\.app$/i,
+      
+      // Vercel (legitimate deployments) (SAFE)
+      /^[a-z0-9-]{3,63}-[a-f0-9]{8,10}\.vercel\.app$/i,
+      /^[a-z0-9-]{3,63}-[a-z0-9]{4,10}-[a-f0-9]{8,10}\.vercel\.app$/i,
+      
+      // Facebook/Meta content delivery (SAFE)
+      /^[a-z0-9-]{8,32}\.fbcdn\.net$/i,
+      /^[a-z0-9-]{8,32}\.facebook\.com$/i,
+      
+      // Legitimate security platforms (SAFE)
       /^[a-z0-9-]{8,32}\.okta\.com$/i,
       /^[a-z0-9-]{8,32}\.auth0\.com$/i,
       /^[a-z0-9-]{8,32}\.onelogin\.com$/i
@@ -222,12 +266,12 @@ class PhishingShield {
   }
 
   // =============================================================================
-  // DOMAIN EXTRACTION FROM URL
+  // DOMAIN EXTRACTION FROM URL (FIXED!)
   // =============================================================================
   extractDomain(url) {
     try {
       const hostname = new URL(url).hostname.toLowerCase();
-      return hostname.replace(/^www\./, ''); // Remove www.
+      return hostname; // DON'T remove www or subdomains! Keep full hostname
     } catch (error) {
       SimpleLogger.error('Error extracting domain:', url);
       return '';
@@ -235,7 +279,21 @@ class PhishingShield {
   }
 
   // =============================================================================
-  // MAIN ANALYSIS - IS THE SITE SAFE?
+  // NEW: SUBDOMAIN SAFETY CHECK
+  // =============================================================================
+  isSubdomainOfSafeDomain(domain) {
+    // Check if subdomain of known safe parent domain
+    for (const parentDomain of this.safeDomainsParent) {
+      if (domain.endsWith('.' + parentDomain) || domain === parentDomain) {
+        SimpleLogger.log('✅ Subdomain of safe parent:', parentDomain);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // =============================================================================
+  // MAIN ANALYSIS - IS THE SITE SAFE? (FIXED!)
   // =============================================================================
   async checkDomainSafety(domain) {
     SimpleLogger.log('🔍 ANALYZING DOMAIN:', domain);
@@ -244,13 +302,24 @@ class PhishingShield {
     this.detectionReasons = [];
     
     try {
-      // STEP 1: CHECK SAFE DOMAINS LIST
-      SimpleLogger.log('📋 Checking safe domains list...');
-      SimpleLogger.log('Safe domains contains domain:', this.safeDomains.has(domain));
-      SimpleLogger.log('Safe domains size:', this.safeDomains.size);
-      
+      // STEP 1: CHECK EXACT SAFE DOMAINS LIST (includes subdomains)
+      SimpleLogger.log('📋 Checking exact safe domains list...');
       if (this.safeDomains.has(domain)) {
-        SimpleLogger.log('✅ DOMAIN IN SAFE LIST - SAFE');
+        SimpleLogger.log('✅ EXACT DOMAIN IN SAFE LIST - SAFE');
+        return { status: 'SAFE', reasons: [] };
+      }
+      
+      // STEP 1.5: NEW - CHECK OAUTH PROVIDERS
+      SimpleLogger.log('🔐 Checking OAuth providers...');
+      if (this.oauthProviders.has(domain)) {
+        SimpleLogger.log('✅ OAUTH PROVIDER - SAFE');
+        return { status: 'SAFE', reasons: [] };
+      }
+      
+      // STEP 1.6: NEW - CHECK SUBDOMAIN OF SAFE PARENT
+      SimpleLogger.log('🌐 Checking subdomain safety...');
+      if (this.isSubdomainOfSafeDomain(domain)) {
+        SimpleLogger.log('✅ SUBDOMAIN OF SAFE DOMAIN - SAFE');
         return { status: 'SAFE', reasons: [] };
       }
       
@@ -270,7 +339,7 @@ class PhishingShield {
       
       SimpleLogger.log('⚠️ Domain not in safe list, continuing analysis...');
       
-      // STEP 4: CHECK DANGEROUS PATTERNS
+      // STEP 4: CHECK DANGEROUS PATTERNS (FIXED: safer patterns)
       if (this.checkDangerousPatterns(domain)) {
         SimpleLogger.warn('🚨 DANGEROUS PATTERN FOUND - DANGEROUS');
         return { status: 'DANGEROUS', reasons: this.detectionReasons };
@@ -331,30 +400,36 @@ class PhishingShield {
   }
 
   // =============================================================================
-  // TYPOSQUATTING CHECK (spelling mistakes)
+  // TYPOSQUATTING CHECK (spelling mistakes) - IMPROVED
   // =============================================================================
   checkTyposquatting(domain) {
     const popularSites = [
       'google.com', 'facebook.com', 'amazon.com', 'paypal.com',
       'microsoft.com', 'apple.com', 'netflix.com', 'instagram.com',
-      'twitter.com', 'linkedin.com'
+      'twitter.com', 'linkedin.com', 'github.com', 'youtube.com'
     ];
     
+    // Extract base domain (remove subdomains for comparison)
+    const baseDomain = domain.split('.').slice(-2).join('.');
+    
     for (const popularSite of popularSites) {
-      const distance = this.calculateEditDistance(domain, popularSite);
+      const distance = this.calculateEditDistance(baseDomain, popularSite);
       
       // If only 1-2 character difference, probably typosquatting
-      if (distance > 0 && distance <= 2 && domain !== popularSite) {
-        this.addReason(`Possible typosquatting: "${domain}" closely resembles "${popularSite}"`);
-        SimpleLogger.warn('🚨 Typosquatting detected:', domain, 'vs', popularSite);
-        return true;
+      if (distance > 0 && distance <= 2 && baseDomain !== popularSite) {
+        // BUT: Make sure it's not a legitimate subdomain
+        if (!domain.endsWith('.' + popularSite)) {
+          this.addReason(`Possible typosquatting: "${baseDomain}" closely resembles "${popularSite}"`);
+          SimpleLogger.warn('🚨 Typosquatting detected:', baseDomain, 'vs', popularSite);
+          return true;
+        }
       }
     }
     return false;
   }
 
   // =============================================================================
-  // SUSPICIOUS SCORE CALCULATION
+  // SUSPICIOUS SCORE CALCULATION (IMPROVED)
   // =============================================================================
   calculateSuspiciousScore(domain) {
     let score = 0;
@@ -385,12 +460,15 @@ class PhishingShield {
       this.addReason('Uses high-risk domain extension');
     }
     
-    // Check for suspicious patterns in subdomains
+    // Check for suspicious patterns in subdomains (IMPROVED)
     const parts = domain.split('.');
     if (parts.length > 2) {
       const subdomain = parts[0];
       const suspiciousSubdomains = ['secure', 'login', 'account', 'verify', 'security'];
-      if (suspiciousSubdomains.includes(subdomain)) {
+      
+      // Only suspicious if it's NOT a known safe parent domain
+      const parentDomain = parts.slice(-2).join('.');
+      if (suspiciousSubdomains.includes(subdomain) && !this.safeDomainsParent.has(parentDomain)) {
         score += 15;
         this.addReason(`Suspicious subdomain: ${subdomain}`);
       }
@@ -438,7 +516,7 @@ class PhishingShield {
   }
 
   // =============================================================================
-  // WARNING DISPLAY
+  // WARNING DISPLAY (IMPROVED)
   // =============================================================================
   showWarning(title, message, color, reasons = [], autoClose = false) {
     SimpleLogger.warn('Showing warning:', title);
@@ -1057,7 +1135,7 @@ function initializePhishingShield() {
       return;
     }
     
-    SimpleLogger.log('🚀 Starting PhishingShield Chrome v1.2.1 with critical fixes');
+    SimpleLogger.log('🚀 Starting PhishingShield Chrome v1.2.2 - GOOGLE LOGIN FIXED');
     
     window.phishingShield = new PhishingShield();
     window.PhishingShieldLoaded = true;
@@ -1097,4 +1175,4 @@ window.addEventListener('unhandledrejection', (event) => {
   }
 });
 
-SimpleLogger.log('📦 PhishingShield Enhanced Detection v1.2.1 loaded successfully');
+SimpleLogger.log('📦 PhishingShield Google Login Fix v1.2.2 loaded successfully');
